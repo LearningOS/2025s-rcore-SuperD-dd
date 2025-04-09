@@ -21,4 +21,4 @@ pub const CLOCK_FREQ: usize = 12500000;
 pub const MEMORY_END: usize = 0x88000000;
 
 /// the task syscall id size
-pub const TASK_SYSCALL_ID_SIZE: usize = 1024;
+pub const TASK_SYSCALL_ID_SIZE: usize = 500;
