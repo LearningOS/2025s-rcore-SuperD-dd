@@ -51,7 +51,7 @@ pub fn sys_trace(_trace_request: usize, _id: usize, _data: usize) -> isize {
         1 => {
             let ptr = _id as *mut u8;
             unsafe {
-                write_volatile(ptr, data as u8);
+                write_volatile(ptr, _data as u8);
             }
             0
         }

@@ -14,7 +14,7 @@ mod switch;
 #[allow(clippy::module_inception)]
 mod task;
 
-use crate::config::MAX_APP_NUM;
+use crate::config::{MAX_APP_NUM, TASK_SYSCALL_ID_SIZE};
 use crate::loader::{get_num_app, init_app_cx};
 use crate::sync::UPSafeCell;
 use lazy_static::*;
@@ -54,7 +54,7 @@ lazy_static! {
         let mut tasks = [TaskControlBlock {
             task_cx: TaskContext::zero_init(),
             task_status: TaskStatus::UnInit,
-            task_syscall_count: 0,
+            task_syscall_count: [0; TASK_SYSCALL_ID_SIZE],
         }; MAX_APP_NUM];
         for (i, task) in tasks.iter_mut().enumerate() {
             task.task_cx = TaskContext::goto_restore(init_app_cx(i));
@@ -138,17 +138,17 @@ impl TaskManager {
     }
 
     /// increase the syscall count 
-    fn increase_syscall_count(&self, syscall_id: usize) {
+    fn increase_syscall_count(&self, _syscall_id: usize) {
         let mut inner = self.inner.exclusive_access();
         let current = inner.current_task;
-        inner.tasks[current].task_syscall_count +=1;
+        inner.tasks[current].task_syscall_count[_syscall_id] +=1;
     }
 
     /// get the current task of syscall count
-    fn get_current_syscall_count(&self, syscall_id: usize) -> usize {
+    fn get_current_syscall_count(&self, _syscall_id: usize) -> usize {
         let inner = self.inner.exclusive_access();
         let current = inner.current_task;
-        inner.tasks[current].task_syscall_count
+        inner.tasks[current].task_syscall_count[_syscall_id]
     }
 }
 

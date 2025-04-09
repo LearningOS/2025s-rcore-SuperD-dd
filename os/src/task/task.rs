@@ -1,6 +1,7 @@
 //! Types related to task management
 
 use super::TaskContext;
+use crate::config::TASK_SYSCALL_ID_SIZE;
 
 /// The task control block (TCB) of a task.
 #[derive(Copy, Clone)]
@@ -10,7 +11,7 @@ pub struct TaskControlBlock {
     /// The task context
     pub task_cx: TaskContext,
     /// The task syscall count
-    pub task_syscall_count: usize,
+    pub task_syscall_count: [usize; TASK_SYSCALL_ID_SIZE],
 }
 
 /// The status of a task
